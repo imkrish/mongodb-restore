@@ -24,7 +24,7 @@ var meta;
  */
 /**
  * error handler
- * 
+ *
  * @function error
  * @param {Object} err - raised error
  */
@@ -37,7 +37,7 @@ function error(err) {
 
 /**
  * read collection metadata from file
- * 
+ *
  * @function readMetadata
  * @param {Object} collection - db collection
  * @param {String} metadata - path of metadata
@@ -76,7 +76,7 @@ function readMetadata(collection, metadata, next) {
 
 /**
  * make dir
- * 
+ *
  * @function makeDir
  * @param {String} pathname - pathname of dir
  * @param {Function} next - callback
@@ -110,7 +110,7 @@ function makeDir(pathname, next) {
 
 /**
  * remove dir
- * 
+ *
  * @function rmDir
  * @param {String} pathname - path of dir
  * @param {Function} [next] - callback
@@ -160,7 +160,7 @@ function rmDir(pathname, next) {
 
 /**
  * JSON parser
- * 
+ *
  * @function fromJson
  * @param {Object} collection - collection model
  * @param {String} collectionPath - path of collection
@@ -201,7 +201,7 @@ function fromJson(collection, collectionPath, next) {
 
 /**
  * BSON parser
- * 
+ *
  * @function fromBson
  * @param {Object} collection - collection model
  * @param {String} collectionPath - path of collection
@@ -242,7 +242,7 @@ function fromBson(collection, collectionPath, next) {
 
 /**
  * set data to all collections available
- * 
+ *
  * @function allCollections
  * @param {Object} db - database
  * @param {String} name - path of database
@@ -295,7 +295,7 @@ function allCollections(db, name, metadata, parser, next) {
 
 /**
  * drop data from some collections
- * 
+ *
  * @function someCollections
  * @param {Object} db - database
  * @param {Array} collections - selected collections
@@ -329,7 +329,7 @@ function someCollections(db, collections, next) {
 
 /**
  * function wrapper
- * 
+ *
  * @function wrapper
  * @param {Object} my - parsed options
  */
@@ -393,14 +393,18 @@ function wrapper(my) {
 
   /**
    * latest callback
-   * 
+   *
    * @return {Null}
    */
   function callback(err) {
 
     logger('restore stop');
     if (my.tar) {
-      rmDir(my.dir);
+      try {
+        rmDir(my.dir)
+      } catch (removeDirErr) {
+        my.callback(removeDirErr)
+      }
     }
 
     if (my.callback !== null) {
@@ -414,7 +418,7 @@ function wrapper(my) {
 
   /**
    * entry point
-   * 
+   *
    * @return {Null}
    */
   function go(root) {
@@ -509,7 +513,7 @@ function wrapper(my) {
 
 /**
  * option setting
- * 
+ *
  * @exports restore
  * @function restore
  * @param {Object} options - various options. Check README.md
